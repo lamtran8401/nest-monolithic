@@ -1,5 +1,6 @@
 import { BaseEntity } from '@common/base';
 import * as argon from 'argon2';
+import { Exclude } from 'class-transformer';
 import { IsEmail, IsString } from 'class-validator';
 import { Role } from 'src/common/enums';
 import { BeforeInsert, Column, Entity } from 'typeorm';
@@ -12,9 +13,12 @@ export class User extends BaseEntity {
   @IsEmail()
   @Column({ unique: true })
   email!: string;
+  @Exclude()
   @IsString()
   @Column()
   password: string;
+  @Column({ nullable: true })
+  avatar: string;
   @Column({ type: 'enum', enum: Role, default: Role.USER })
   role: Role;
   @Column({ default: true })

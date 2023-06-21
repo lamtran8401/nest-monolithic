@@ -13,17 +13,13 @@ async function bootstrap() {
     origin: '*',
     credentials: true,
   });
-
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
     }),
   );
-
   app.useGlobalFilters(new TypeormExceptionFilter());
-
-  app.use(cookieParser());
-
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
 
   const PORT = process.env.PORT || 3000;

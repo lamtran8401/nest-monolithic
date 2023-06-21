@@ -1,23 +1,23 @@
+import { User } from '@apis/users/entities/user.entity';
+import { UsersService } from '@apis/users/users.service';
+import { setTokenToCookie } from '@common/helpers';
+import { Token } from '@common/types';
+import { PayloadJwt } from '@jwt/jwt.interface';
+import { JWTService } from '@jwt/jwt.service';
 import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
 import { Response } from 'express';
-import { setTokenToCookie } from 'src/common/helpers/set-token';
-import { PayloadJwt } from 'src/common/types/payload-jwt.type';
-import { Token } from 'src/common/types/token.type';
-import { User } from '../users/entities/user.entity';
-import { UsersService } from './../users/users.service';
 import { AuthDto } from './dtos/auth.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService,
+    private jwtService: JWTService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -34,8 +34,14 @@ export class AuthService {
   async login(user: User, res: Response) {
     const payload: PayloadJwt = {
       sub: user.id,
+      email: user.email,
     };
-    return this.createCredentials(payload, res);
+
+    const access_token = this.createCredentials(payload, res);
+    return {
+      access_token,
+      user,
+    };
   }
 
   async register(userDto: AuthDto, res: Response) {
@@ -43,9 +49,14 @@ export class AuthService {
 
     const payload: PayloadJwt = {
       sub: user.id,
+      email: user.email,
     };
 
-    return this.createCredentials(payload, res);
+    const access_token = this.createCredentials(payload, res);
+    return {
+      access_token,
+      user,
+    };
   }
 
   genTokens(payload: PayloadJwt) {
@@ -61,11 +72,11 @@ export class AuthService {
     };
   }
 
-  createCredentials(payload: PayloadJwt, res: Response) {
+  createCredentials(payload: PayloadJwt, res: Response): Token {
     const { access_token, refresh_token } = this.genTokens(payload);
 
     setTokenToCookie(res, refresh_token);
 
-    return { access_token };
+    return access_token;
   }
 }

@@ -22,7 +22,9 @@
       "@common/*": ["src/common/*"],
       "@passport/*": ["src/passport/*"],
       "@database/*": ["src/database/*"],
-      "@redis/*": ["src/redis/*"]
+      "@redis/*": ["src/redis/*"],
+      "@jwt/*": ["src/jwt/*"],
+      "@multer/*": ["src/multer/*"],
     }
   }
 }
