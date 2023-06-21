@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: dev_db
+    image: postgres:12
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=dev_db
+    ports:
+      - "5432:5432"
+
+  redis:
+    container_name: nest_redis
+    image: redis:7
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass $REDIS_PASSWORD
+    volumes: 
+      - 'redis_data:/data'
+
+volumes:
+  db_data:
+  redis_data:
