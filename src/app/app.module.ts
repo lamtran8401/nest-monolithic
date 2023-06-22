@@ -1,4 +1,5 @@
 import { ApiModule } from '@apis/api.module';
+import { CryptoModule } from '@crypto/crypto.module';
 import { DatabaseModule } from '@database/database.module';
 import { JWTModule } from '@jwt/jwt.module';
 import { Module } from '@nestjs/common';
@@ -24,8 +25,9 @@ import { AppService } from './app.service';
     }),
     DatabaseModule,
     JWTModule,
-    PassportModule,
     RedisModule,
+    PassportModule,
+    CryptoModule,
     ApiModule,
   ],
   controllers: [AppController],

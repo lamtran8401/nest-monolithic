@@ -2,6 +2,7 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -29,5 +30,10 @@ export class AuthController {
   @Post('register')
   register(@Body() userDto: AuthDto, @Res({ passthrough: true }) res) {
     return this.authService.register(userDto, res);
+  }
+
+  @Get('logout')
+  logout(@Req() req, @Res({ passthrough: true }) res) {
+    return this.authService.logout(req.user, res);
   }
 }

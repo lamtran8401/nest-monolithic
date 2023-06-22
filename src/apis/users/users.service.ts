@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
-import { UploadService } from 'src/upload/upload.service';
+import * as fs from 'fs';
 import { Repository } from 'typeorm';
 import { AuthDto } from '../auth/dtos/auth.dto';
 import { User } from './entities/user.entity';
@@ -13,7 +13,6 @@ export class UsersService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private configService: ConfigService,
-    private uploadService: UploadService,
   ) {}
 
   findAll(): Promise<User[]> {
@@ -42,6 +41,15 @@ export class UsersService {
   }
 
   uploadAvatar(file: Express.Multer.File, user: User, req: Request) {
+    const oldAvatar = user.avatar;
+    if (oldAvatar) {
+      const oldAvatarPath = oldAvatar.split('/').slice(-1)[0];
+      const path = `./public/${oldAvatarPath}`;
+      fs.unlink(path, err => {
+        if (err) console.log(err);
+      });
+    }
+
     const PORT = this.configService.get<string>('PORT') || 3000;
     const prefix = `${req.protocol}://${req.hostname}:${PORT}`;
     user.avatar = `${prefix}/${file.path}`;

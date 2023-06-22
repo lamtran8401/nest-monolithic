@@ -2,7 +2,7 @@ import { GetUser, Roles } from '@common/decorators';
 import { Role } from '@common/enums';
 import { JwtAuthGuard, RolesGuard } from '@common/guards';
 import { FileUploadPipe } from '@common/pipes/file-upload.pipe';
-import { multerConfig } from '@multer/multer.local.storage';
+import { multerConfig } from '@multer/multer.config';
 import {
   ClassSerializerInterceptor,
   Controller,

@@ -9,6 +9,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { RedisService } from '@redis/redis.service';
 import * as argon from 'argon2';
 import { Response } from 'express';
 import { AuthDto } from './dtos/auth.dto';
@@ -18,6 +19,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JWTService,
+    private redisService: RedisService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -59,24 +61,29 @@ export class AuthService {
     };
   }
 
-  genTokens(payload: PayloadJwt) {
-    const access_token: Token = this.jwtService.sign(payload);
-    const refresh_token: Token = this.jwtService.sign(payload, {
-      secret: process.env.JWT_SECRET_REFRESH,
-      expiresIn: '30d',
-    });
-
-    return {
-      access_token,
-      refresh_token,
-    };
+  logout(user: User, res: Response) {
+    const sub = user.id;
+    this.clearCredentials(sub.toString(), res);
+    const result = { message: 'Logout successfully' };
+    return result;
   }
 
+  // refreshTokens(refresh_token: Token, res: Response) {}
+
   createCredentials(payload: PayloadJwt, res: Response): Token {
-    const { access_token, refresh_token } = this.genTokens(payload);
+    const { access_token, refresh_token } = this.jwtService.genTokens(payload);
+
+    this.redisService.setRefreshToken(payload.sub.toString(), refresh_token);
+    this.redisService.setAccessToken(payload.sub.toString(), access_token);
 
     setTokenToCookie(res, refresh_token);
 
     return access_token;
+  }
+
+  clearCredentials(sub: string, res: Response) {
+    res.clearCookie('refresh_token');
+    this.redisService.delAccessToken(sub);
+    this.redisService.delRefreshToken(sub);
   }
 }
