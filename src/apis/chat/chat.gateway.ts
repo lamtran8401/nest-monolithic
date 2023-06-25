@@ -16,24 +16,20 @@ import { Server, Socket } from 'socket.io';
     origin: '*',
   },
 })
-export class ChatGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
-  @WebSocketServer() server!: Server;
+export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+  @WebSocketServer()
+  server!: Server;
 
-  constructor(
-    private jwtService: JWTService,
-    private usersService: UsersService,
-  ) {}
+  constructor(private jwtService: JWTService, private usersService: UsersService) {}
 
   afterInit(server: any) {
-    throw new Error('Method not implemented.');
+    return 'afterInit';
   }
   handleConnection(client: Socket, ...args: any[]) {
-    throw new Error('Method not implemented.');
+    return 'handleConnection';
   }
   handleDisconnect(client: Socket) {
-    throw new Error('Method not implemented.');
+    return 'handleDisconnect';
   }
 
   async getUserData(client: Socket) {

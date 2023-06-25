@@ -1,16 +1,16 @@
+import { User } from '@apis/users/entities/user.entity';
+import { UsersService } from '@apis/users/users.service';
 import { Token } from '@common/types';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
-import { PayloadJwt } from './jwt.interface';
+import { JwtVerifyPayload, PayloadJwt } from './jwt.interface';
 
 @Injectable()
 export class JWTService {
-  constructor(private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService, private usersService: UsersService) {}
 
   sign(payload: PayloadJwt, isRefreshToken = false): Token {
-    return isRefreshToken
-      ? this.signRefreshToken(payload)
-      : this.jwtService.sign(payload);
+    return isRefreshToken ? this.signRefreshToken(payload) : this.jwtService.sign(payload);
   }
 
   verify(token: Token, options?: JwtVerifyOptions) {
@@ -32,5 +32,17 @@ export class JWTService {
     const refresh_token = this.sign(payload, true);
 
     return { access_token, refresh_token };
+  }
+
+  async getUserFromToken(token: Token): Promise<User> {
+    const payload: JwtVerifyPayload = this.jwtService.verify(token, {
+      secret: process.env.JWT_SECRET_REFRESH,
+    });
+
+    const user: User = await this.usersService.findOne(payload.sub);
+
+    if (!user) throw new BadRequestException('Not found user with this credentials.');
+
+    return user;
   }
 }

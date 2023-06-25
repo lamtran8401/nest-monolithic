@@ -1,4 +1,6 @@
+import { ChangePasswordDto } from '@apis/auth/dtos';
 import { BaseEntity } from '@common/base';
+import { BadRequestException } from '@nestjs/common';
 import * as argon from 'argon2';
 import { Exclude } from 'class-transformer';
 import { IsEmail, IsString } from 'class-validator';
@@ -32,5 +34,19 @@ export class User extends BaseEntity {
   @BeforeInsert()
   async beforeInsert() {
     this.password = await argon.hash(this.password);
+  }
+
+  async comparePassword(password: string) {
+    return await argon.verify(this.password, password);
+  }
+
+  async changePassword(passwordDto: ChangePasswordDto) {
+    const { oldPassword, newPassword } = passwordDto;
+    const matchedPassword = await this.comparePassword(oldPassword);
+    if (!matchedPassword) throw new BadRequestException('Old password is not correct.');
+
+    this.password = await argon.hash(newPassword);
+    await this.save();
+    return this;
   }
 }

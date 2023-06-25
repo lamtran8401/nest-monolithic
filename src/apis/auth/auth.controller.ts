@@ -1,3 +1,6 @@
+import { User } from '@apis/users/entities/user.entity';
+import { Cookies, GetUser } from '@common/decorators';
+import { JwtAuthGuard } from '@common/guards';
 import {
   Body,
   ClassSerializerInterceptor,
@@ -5,6 +8,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Req,
   Res,
@@ -13,7 +17,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dtos/auth.dto';
+import { AuthDto, ChangePasswordDto } from './dtos';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -32,8 +36,20 @@ export class AuthController {
     return this.authService.register(userDto, res);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Patch('change-password')
+  changePassword(@Body() input: ChangePasswordDto, @GetUser() user: User) {
+    return this.authService.changePassword(input, user);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('logout')
-  logout(@Req() req, @Res({ passthrough: true }) res) {
-    return this.authService.logout(req.user, res);
+  logout(@GetUser() user: User, @Res({ passthrough: true }) res) {
+    return this.authService.logout(user, res);
+  }
+
+  @Get('refresh-token')
+  refreshToken(@Cookies('refresh_token') refreshToken: string, @Res({ passthrough: true }) res) {
+    return this.authService.refreshToken(refreshToken, res);
   }
 }

@@ -1,3 +1,4 @@
+import { BaseService } from '@common/base/base.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,12 +9,15 @@ import { AuthDto } from '../auth/dtos/auth.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
-export class UsersService {
+export class UsersService extends BaseService<User> {
+  name = 'User';
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private configService: ConfigService,
-  ) {}
+  ) {
+    super(userRepository);
+  }
 
   findAll(): Promise<User[]> {
     return this.userRepository.find();

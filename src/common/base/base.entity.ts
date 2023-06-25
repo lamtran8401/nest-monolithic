@@ -1,5 +1,7 @@
+import { Exclude } from 'class-transformer';
 import {
   CreateDateColumn,
+  DeleteDateColumn,
   PrimaryGeneratedColumn,
   BaseEntity as TypeormBaseEntity,
   UpdateDateColumn,
@@ -12,4 +14,7 @@ export class BaseEntity extends TypeormBaseEntity {
   createdAt!: Date;
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
+  @DeleteDateColumn({ name: 'deleted_at' })
+  @Exclude()
+  deletedAt!: Date;
 }

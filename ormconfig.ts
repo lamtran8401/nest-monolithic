@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config({ path: '.env' });
 
+import { Message } from '@apis/chat/entities/mesage.entity';
+import { Room } from '@apis/chat/entities/room.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
@@ -15,7 +17,7 @@ export const options: DataSourceOptions = {
   password: DB_PASSWORD,
   database: DB_NAME,
   migrationsTableName: 'migrations',
-  migrations: [User],
+  migrations: [User, Message, Room],
   synchronize: NODE_ENV !== 'production',
 };
 
