@@ -1,4 +1,5 @@
 import { ApiModule } from '@apis/api.module';
+import { CloudinaryModule } from '@cloudinary/cloudinary.module';
 import { CryptoModule } from '@crypto/crypto.module';
 import { DatabaseModule } from '@database/database.module';
 import { JWTModule } from '@jwt/jwt.module';
@@ -23,6 +24,7 @@ import { AppService } from './app.service';
       rootPath: join(process.cwd(), 'public'),
       serveRoot: '/public',
     }),
+    CloudinaryModule,
     DatabaseModule,
     JWTModule,
     RedisModule,

@@ -1,3 +1,4 @@
+import { BaseController } from '@common/base/base.controller';
 import { GetUser, Roles } from '@common/decorators';
 import { Role } from '@common/enums';
 import { JwtAuthGuard, RolesGuard } from '@common/guards';
@@ -23,8 +24,11 @@ import { UsersService } from './users.service';
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard, RolesGuard)
-export class UsersController {
-  constructor(private usersService: UsersService) {}
+export class UsersController extends BaseController<User> {
+  relations = [];
+  constructor(private usersService: UsersService) {
+    super(usersService);
+  }
 
   @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.OK)

@@ -8,9 +8,7 @@ export class CreateMessageDto {
   @IsNotEmpty()
   userId!: number;
   @IsString()
-  @IsNotEmpty()
   text!: string;
   @IsOptional()
-  @IsString({ each: true })
   attachments: string[];
 }

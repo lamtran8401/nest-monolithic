@@ -5,13 +5,12 @@ import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/co
 import { CreateMessageDto } from '../dtos/create-message.dto';
 import { Message } from '../entities/mesage.entity';
 import { MessageService } from '../services/message.service';
-import { RoomService } from '../services/room.service';
 
 @Controller('message')
 @UseGuards(JwtAuthGuard, RoomMemberGuard)
 export class MessageController extends BaseController<Message> {
   relations = [];
-  constructor(private messageService: MessageService, private roomService: RoomService) {
+  constructor(private messageService: MessageService) {
     super(messageService);
   }
 

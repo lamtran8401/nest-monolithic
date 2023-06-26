@@ -18,7 +18,7 @@ export class MessageService extends BaseService<Message> {
     super(messageRepository);
   }
 
-  async create(input: CreateMessageDto) {
+  async createMessage(input: CreateMessageDto) {
     const { roomId, userId } = input;
     await this.usersService.findOne(userId);
     await this.roomService.getOneByIdOrFail(roomId);

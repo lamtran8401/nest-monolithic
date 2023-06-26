@@ -8,7 +8,7 @@ export class Message extends BaseEntity {
   @Column()
   text!: string;
   @Column({ type: 'simple-array', default: '' })
-  attachments: string[];
+  attachments?: string[];
   @Column({ name: 'user_id' })
   userId!: number;
   @Column({ name: 'room_id' })
@@ -16,8 +16,8 @@ export class Message extends BaseEntity {
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
-  user!: User;
+  user?: User;
   @ManyToOne(() => Room)
   @JoinColumn({ name: 'room_id' })
-  room!: Room;
+  room?: Room;
 }

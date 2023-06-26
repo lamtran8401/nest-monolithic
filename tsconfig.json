@@ -26,6 +26,7 @@
       "@jwt/*": ["src/jwt/*"],
       "@multer/*": ["src/multer/*"],
       "@crypto/*": ["src/crypto/*"],
+      "@cloudinary/*": ["src/cloudinary/*"],
     }
   }
 }
