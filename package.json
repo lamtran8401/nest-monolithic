@@ -17,7 +17,16 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "NODE_OPTIONS='-r tsconfig-paths/register' npx typeorm-ts-node-esm -d ./src/config/ormconfig.ts",
+    "db:create": "npx typeorm-ts-node-esm migration:create ./src/migrations/RootMigration",
+    "db:gen": "yarn run typeorm migration:generate",
+    "db:run": "yarn run typeorm migration:run",
+    "db:revert": "yarn run typeorm migration:revert",
+    "db:drop": "yarn run typeorm schema:drop",
+    "db:sync": "yarn run typeorm schema:sync",
+    "db:show": "yarn run typeorm schema:log",
+    "db:clear": "yarn run typeorm cache:clear"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -34,7 +43,10 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cloudinary": "^1.37.2",
+    "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "helmet": "^7.0.0",
     "ioredis": "^5.3.2",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
