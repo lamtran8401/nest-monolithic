@@ -8,8 +8,8 @@ import { JWTService } from '@jwt/jwt.service';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { RedisService } from '@redis/redis.service';
 import { Response } from 'express';
-import { ChangePasswordDto } from './dtos';
-import { AuthDto } from './dtos/auth.dto';
+import { ChangePasswordDto } from './dto';
+import { AuthDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {

@@ -17,7 +17,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { AuthDto, ChangePasswordDto } from './dtos';
+import { AuthDto, ChangePasswordDto } from './dto';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)

@@ -1,4 +1,4 @@
-import { ChangePasswordDto } from '@apis/auth/dtos';
+import { ChangePasswordDto } from '@apis/auth/dto';
 import { BaseEntity } from '@common/base';
 import { BadRequestException } from '@nestjs/common';
 import * as argon from 'argon2';

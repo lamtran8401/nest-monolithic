@@ -12,7 +12,14 @@ export class AppController {
 
   @Get()
   getHello(): string {
+    console.log('hello');
     return this.appService.getHello();
+  }
+
+  @Get()
+  getTest(): string {
+    console.log('test');
+    return 'test';
   }
 
   @Post()

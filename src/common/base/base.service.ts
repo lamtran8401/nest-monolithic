@@ -1,4 +1,4 @@
-import { getQueryBuilder } from '@common/helpers/queryBuilder';
+import { PaginationToQuery } from '@common/helpers/paginationToQuery';
 import { NotFoundException } from '@nestjs/common';
 import { DeepPartial, FindOptionsOrder, FindOptionsWhere, Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -17,16 +17,26 @@ export abstract class BaseService<Entity extends BaseEntity> {
     return this.repo.find({ where, relations });
   }
 
-  async getAllWithPagination(
+  getAllAdvanced(
     query: PaginationDto,
     where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[],
     order?: FindOptionsOrder<Entity>,
     ...relations: string[]
   ): Promise<[Entity[], number]> {
-    const queryBuilder = getQueryBuilder(this.repo, query, where, order, ...relations);
-
-    return queryBuilder.getManyAndCount();
+    const { skip, take } = PaginationToQuery(query);
+    return this.repo.findAndCount({ where, order, relations, skip, take });
   }
+
+  // async getAllWithPagination(
+  //   query: PaginationDto,
+  //   where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[],
+  //   order?: FindOptionsOrder<Entity>,
+  //   ...relations: string[]
+  // ): Promise<[Entity[], number]> {
+  //   const queryBuilder = getQueryBuilder(this.repo, query, where, order, ...relations);
+
+  //   return queryBuilder.getManyAndCount();
+  // }
 
   getOne(
     where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[],

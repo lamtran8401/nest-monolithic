@@ -20,13 +20,13 @@ export class RoomController extends BaseController<Room> {
 
   @Get('all')
   getAllByUserId(@GetUser('id') userId: number, @Query() query: PaginationDto) {
-    return this.roomService.getAllWithPagination(query, {
+    return this.roomService.getAllAdvanced(query, {
       members: ArrayContains([userId]),
     });
   }
 
   @Post()
-  createRoom(@Body() body: CreateRoomDto) {
+  override create(@Body() body: CreateRoomDto) {
     return super.create(body);
   }
 

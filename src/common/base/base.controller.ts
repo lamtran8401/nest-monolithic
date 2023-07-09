@@ -6,6 +6,8 @@ import { BaseService } from './base.service';
 
 export abstract class BaseController<Entity extends BaseEntity> {
   abstract relations: string[];
+  order = { createdAt: 'DESC' } as FindOptionsOrder<Entity>;
+
   constructor(public readonly service: BaseService<Entity>) {}
 
   @Post()
@@ -15,8 +17,7 @@ export abstract class BaseController<Entity extends BaseEntity> {
 
   @Get()
   getAll(@Query() query: PaginationDto): Promise<[Entity[], number]> {
-    const orderOptions = { createdAt: 'DESC' } as FindOptionsOrder<Entity>;
-    return this.service.getAllWithPagination(query, {}, orderOptions, ...this.relations);
+    return this.service.getAllAdvanced(query, {}, this.order, ...this.relations);
   }
 
   @Get(':id')

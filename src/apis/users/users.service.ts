@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import * as fs from 'fs';
 import { Repository } from 'typeorm';
-import { AuthDto } from '../auth/dtos/auth.dto';
+import { AuthDto } from '../auth/dto/auth.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()

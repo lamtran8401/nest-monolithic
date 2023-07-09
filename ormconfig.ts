@@ -6,8 +6,7 @@ import { Room } from '@apis/chat/entities/room.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME, NODE_ENV } =
-  process.env;
+const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME, NODE_ENV } = process.env;
 
 export const options: DataSourceOptions = {
   type: 'postgres',

@@ -15,8 +15,7 @@ export class FileUploadPipe extends ParseFilePipe {
         new FileTypeValidator({ fileType: 'jpg|png|jpeg' }),
         new MaxFileSizeValidator({
           maxSize: 1024 ** 2,
-          message:
-            'File too large. You can upload file with maximum size of 1MB',
+          message: 'File too large. You can upload file with maximum size of 1MB',
         }),
       ],
     });

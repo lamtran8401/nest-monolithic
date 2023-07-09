@@ -16,9 +16,7 @@ export class MessageController extends BaseController<Message> {
 
   @Get(':roomId')
   async getAllRoomMessage(@Param('roomId') roomId: number, @Query() query: PaginationDto) {
-    return this.messageService.getAllWithPagination(query, {
-      roomId,
-    });
+    return this.messageService.getAllAdvanced(query, { roomId });
   }
 
   @Post(':roomId')
