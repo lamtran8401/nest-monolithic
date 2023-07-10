@@ -16,12 +16,6 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get()
-  getTest(): string {
-    console.log('test');
-    return 'test';
-  }
-
   @Post()
   @UseInterceptors(
     FilesInterceptor('files', 5, {
